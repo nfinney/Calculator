@@ -24,41 +24,52 @@ main {
 button {
     border: none;
     border-radius: 5px;
-    color: white;
     cursor: pointer;
     font-family: 'Roboto Condensed', sans-serif;
     font-size: 25px;
     font-weight: 400;
+    
 }
 button:focus {
     outline: 0;
 }
-button.operator:hover {
-    background-color: rgb(226, 138, 38);
-    color: rgb(59, 59, 59);
-    outline: 0;
-}
-button.operator {
+button.edit, button.operator {
     background: rgb(255, 155, 41);
+    color: white;
 }
 button.number {
     background: rgb(211, 211, 211);
     color: rgb(59, 59, 59);
 }
-button.number:hover {
+button.numberClicked {
     background: rgb(185, 185, 185);
-    outline: 0;
+    transition: all .09s ease;
+}
+button.notNumberClicked {
+    background: rgb(226, 138, 38);
+    color: rgb(59, 59, 59);
+    transition: all .09s ease;
 }
 
 
 
 /* DISPLAY SECTION */
 .display {
+    align-items: center;
     background: rgb(59, 59, 59);
     border-radius: 5px;
-    height: 100px;
+    color: white;
+    display: flex;
+    font-size: 60px;
     grid-column: 1 / 5;
     grid-row: 1 / 2;
+    height: 100px;
+    justify-content: flex-end;
+    vertical-align: middle;
+}
+.display div {
+    margin-right: 10px;
+    overflow: scroll;
 }
 /* // END - DISPLAY SECTION */
 
@@ -70,20 +81,11 @@ button.number:hover {
 }
 #delete {
     grid-column: 3 / 4;
-    /* grid-row: 2 / 3; */
 }
-#divide, #x {
+#divide, #multiply {
     grid-column: 4 / 5;
-    /* grid-row: 2 / 3; */
 }
 [id="0"] {
     grid-row: 6 / 7;
 }
-/* [id="7"], [id="8"], [id="9"], #x {
-    grid-row: 3 / 4;
-}
-[id="4"], [id="5"], [id="6"], [id="-"] {
-    grid-row: 4 / 5;
-} */
-
 /* // END - BUTTON SECTION */
