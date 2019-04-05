@@ -84,18 +84,46 @@ function addTransition(e) {
         e.target.classList.add('notNumberClicked');
         firstNumber = '';
         secondNumber = '';
-        isFirstNumber = true;
+        isFirstNumber = true; // tells us we're back to setting up firstNumber
         document.querySelector('.display').lastElementChild.textContent = '0';
 
     } else if(targetClassList.contains('operator')) {
-        if(firstNumber == '') {
-            firstNumber = 0;
-        }
+        // tells us first number has been set (since operator was pressed)
+        // and start recording secondNumber
         isFirstNumber = false;
+
+        
+        // must be ===, otherwise '' is equal to 0 when using ==
+        if(firstNumber === '') {
+            firstNumber = 0;
+        } else if(wasOperatorClicked && secondNumber != '') {
+            console.log('operator hit before =');
+            firstNumber = operate(operatorHolder, parseFloat(firstNumber), parseFloat(secondNumber));
+            document.querySelector('.display').lastElementChild.textContent = firstNumber;
+            secondNumber = '';
+        }
+
+        // store operator number
         operatorHolder = e.target.id;
 
+        // set to true after operator button pressed first time
+        // allows us to test if operator hit 2nd or 3rd time, before user presses the equals button
+        wasOperatorClicked = true; 
+        
+        
+        // wasOperatorClicked = true; // tells us we've hit the operator once already
+        // isFirstNumber = false; // tells us that firstNumberHolder input has been set by user, and we're on secondNumber now
+        // ^happens on 1st if
+        
+
     } else if(targetClassList.contains('equals')) {
-        document.querySelector('.display').lastElementChild.textContent = operate(operatorHolder, parseFloat(firstNumber), parseFloat(secondNumber));
+        firstNumber = operate(operatorHolder, parseFloat(firstNumber), parseFloat(secondNumber));
+        document.querySelector('.display').lastElementChild.textContent = firstNumber;
+        // document.querySelector('.display').lastElementChild.textContent = operate(operatorHolder, parseFloat(firstNumber), parseFloat(secondNumber));
+        
+        // if we don't set the second number to '' it calls the else if above 
+        // and adds the previous second number to the sum
+        secondNumber = ''; 
     }
 }
 
@@ -108,6 +136,7 @@ function removeTransition(e) {
         e.target.classList.remove('notNumberClicked');
     }
 }
+
 
 
 // heck to see if a decimal has been clicked, if so do nothing, if not return a decimal
