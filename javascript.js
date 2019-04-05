@@ -33,17 +33,18 @@ function divide (a, b) {
 	return a / b;
 }
 
-// function sum (a) {
-// 	if(a.length === 0) {
-// 		return 0;
-// 	} else {
-// 		var sum = 0;
-// 		for(i=0; i<a.length; i++){
-// 			sum += a[i];
-// 		}
-// 		return sum;
-// 	}
-// }
+function operate(operator, a, b=a) {
+    switch(operator){
+        case '+':
+            return add(a, b);
+        case '-':
+            return subtract(a, b);
+        case '*':
+            return multiply(a, b);
+        case '/':
+            return divide(a, b);
+    }
+}
 // END // OPERATOR FUNCTIONS
 
 
@@ -99,7 +100,7 @@ function addTransition(e) {
         } else if(wasOperatorClicked && secondNumber != '') {
             console.log('operator hit before =');
             firstNumber = operate(operatorHolder, parseFloat(firstNumber), parseFloat(secondNumber));
-            document.querySelector('.display').lastElementChild.textContent = firstNumber;
+            document.querySelector('.display').lastElementChild.textContent = firstNumber.toFixed(3);
             secondNumber = '';
         }
 
@@ -118,7 +119,7 @@ function addTransition(e) {
 
     } else if(targetClassList.contains('equals')) {
         firstNumber = operate(operatorHolder, parseFloat(firstNumber), parseFloat(secondNumber));
-        document.querySelector('.display').lastElementChild.textContent = firstNumber;
+        document.querySelector('.display').lastElementChild.textContent = firstNumber.toFixed(3);
         // document.querySelector('.display').lastElementChild.textContent = operate(operatorHolder, parseFloat(firstNumber), parseFloat(secondNumber));
         
         // if we don't set the second number to '' it calls the else if above 
@@ -150,21 +151,7 @@ function wasDecimal(){
 }
 
 
-function operate(operator, a, b=0) {
-    switch(operator){
-        case '+':
-            return add(a, b);
-        case '-':
-            return subtract(a, b);
-        case '*':
-            return multiply(a, b);
-        case '/':
-            return divide(a, b);
-        case '=':
-            return equals(a, b);
-            break;
-    }
-}
+
 
 
 
