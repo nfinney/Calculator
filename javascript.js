@@ -98,9 +98,11 @@ function addTransition(e) {
         if(firstNumber === '') {
             firstNumber = 0;
         } else if(wasOperatorClicked && secondNumber != '') {
-            console.log('operator hit before =');
+            
             firstNumber = operate(operatorHolder, parseFloat(firstNumber), parseFloat(secondNumber));
-            document.querySelector('.display').lastElementChild.textContent = firstNumber.toFixed(3);
+          
+            document.querySelector('.display').lastElementChild.textContent = round(firstNumber, 3);
+
             secondNumber = '';
         }
 
@@ -111,22 +113,46 @@ function addTransition(e) {
         // allows us to test if operator hit 2nd or 3rd time, before user presses the equals button
         wasOperatorClicked = true; 
         
-        
-        // wasOperatorClicked = true; // tells us we've hit the operator once already
-        // isFirstNumber = false; // tells us that firstNumberHolder input has been set by user, and we're on secondNumber now
-        // ^happens on 1st if
-        
 
     } else if(targetClassList.contains('equals')) {
-        firstNumber = operate(operatorHolder, parseFloat(firstNumber), parseFloat(secondNumber));
-        document.querySelector('.display').lastElementChild.textContent = firstNumber.toFixed(3);
-        // document.querySelector('.display').lastElementChild.textContent = operate(operatorHolder, parseFloat(firstNumber), parseFloat(secondNumber));
-        
-        // if we don't set the second number to '' it calls the else if above 
-        // and adds the previous second number to the sum
-        secondNumber = ''; 
+        if(firstNumber == '' & secondNumber == ''){
+            firstNumber = 0;
+            secondNumber = 0;
+            document.querySelector('.display').lastElementChild.textContent = firstNumber;
+        } else {
+            firstNumber = operate(operatorHolder, parseFloat(firstNumber), parseFloat(secondNumber));
+            
+            document.querySelector('.display').lastElementChild.textContent = round(firstNumber, 3);
+            
+            // if we don't set the second number to '' it calls the else if above 
+            // and adds the previous second number to the sum
+            secondNumber = ''; 
+        }
+
+
+        // NEXT STEPS HERE!!!!!
+        // 1) how not to return decimals every time, even when decimals aren't being used
+        // 2) how to adjust for = being pressed before another operator
+        //      - secondNumber = 0; in first if should probably be = ''
+        //      - if a number is pressed and then =, just show the number pressed
+        //      - if a number then operator, then equals, call that operator for the number pressed
+        //          - meaning '3x=' then call for 3x3 and show the result
+
+
+
+
     }
 }
+
+
+// Round decimals to 3 spots
+function round(value, decimals) {
+    return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+}
+  
+  round(1.005, 2);
+
+
 
 // REMOVES BUTTON STYLE CHANGES AFTER CLICKED
 function removeTransition(e) {
