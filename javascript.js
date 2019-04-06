@@ -33,7 +33,8 @@ function divide (a, b) {
 	return a / b;
 }
 
-function operate(operator, a, b=a) {
+function operate(operator, a, b) {
+    if (isNaN(b)) b = a;
     switch(operator){
         case '+':
             return add(a, b);
@@ -42,7 +43,14 @@ function operate(operator, a, b=a) {
         case '*':
             return multiply(a, b);
         case '/':
-            return divide(a, b);
+            if(b === 0){
+                return NaN;
+            } else{
+                return divide(a, b);
+            }
+            
+        default:
+            return a;
     }
 }
 // END // OPERATOR FUNCTIONS
@@ -86,6 +94,7 @@ function addTransition(e) {
         firstNumber = '';
         secondNumber = '';
         isFirstNumber = true; // tells us we're back to setting up firstNumber
+        wasOperatorClicked = false; // tells us we're back to setting up firstNumber
         document.querySelector('.display').lastElementChild.textContent = '0';
 
     } else if(targetClassList.contains('operator')) {
@@ -116,14 +125,19 @@ function addTransition(e) {
 
     } else if(targetClassList.contains('equals')) {
         if(firstNumber == '' & secondNumber == ''){
-            firstNumber = 0;
-            secondNumber = 0;
-            document.querySelector('.display').lastElementChild.textContent = firstNumber;
+            return;
+            // firstNumber = 0;
+            // secondNumber = 0;
+            // document.querySelector('.display').lastElementChild.textContent = firstNumber;
         } else {
             firstNumber = operate(operatorHolder, parseFloat(firstNumber), parseFloat(secondNumber));
             
-            document.querySelector('.display').lastElementChild.textContent = round(firstNumber, 3);
-            
+            if(isNaN(firstNumber)){
+                document.querySelector('.display').lastElementChild.textContent = 'Not a number';
+            } else {
+                document.querySelector('.display').lastElementChild.textContent = round(firstNumber, 3);
+            }
+
             // if we don't set the second number to '' it calls the else if above 
             // and adds the previous second number to the sum
             secondNumber = ''; 
@@ -131,13 +145,9 @@ function addTransition(e) {
 
 
         // NEXT STEPS HERE!!!!!
-        // 1) how not to return decimals every time, even when decimals aren't being used
-        // 2) how to adjust for = being pressed before another operator
-        //      - secondNumber = 0; in first if should probably be = ''
-        //      - if a number is pressed and then =, just show the number pressed
-        //      - if a number then operator, then equals, call that operator for the number pressed
-        //          - meaning '3x=' then call for 3x3 and show the result
-
+        // 1) if user hits +, 3, =, =, =,
+        //      - it should return 3 + 3 + 3 + 3 continous
+        //      - not 3+3 = 6 + 6 = 12 + 12 = 24
 
 
 
