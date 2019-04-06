@@ -7,7 +7,7 @@ const display = document.querySelector('.display').lastElementChild.textContent;
 let firstNumber = '';
 let secondNumber = '';
 let operatorHolder = '';
-let isFirstNumber = true;
+let onFirstNumber = true;
 
 let wasOperatorClicked = false;
 let wasDecimalClicked = false;
@@ -66,41 +66,47 @@ function addTransition(e) {
         
 
         // if user keeps pressing 0 at beginning, don't show more 0's i.e. 00000001, 0000099
-        // if(firstNumber != '' || e.target.id != '0') {  
+        if(firstNumber != '' || e.target.id != '0') {  
             
-        //     if(e.target.id == '.'){
-        //         firstNumber += wasDecimal();
-        //     } else {
-        //         firstNumber += e.target.id;
-        //     }
-        
-        if(isFirstNumber){
-            firstNumber += e.target.id;
-            document.querySelector('.display').lastElementChild.textContent = firstNumber;
-        } else {
-            console.log('second number');
-            secondNumber += e.target.id;
-            document.querySelector('.display').lastElementChild.textContent = secondNumber;
-        }
-        
+            if(e.target.id == '.'){
+                if(onFirstNumber){
+                    firstNumber += isDecimal();
+                } else {
+                    secondNumber += isDecimal();
+                }                
+            } else {
+                if(onFirstNumber){
+                    firstNumber += e.target.id;
+                    document.querySelector('.display').lastElementChild.textContent = firstNumber;
+                } else {
+                    console.log('second number');
+                    secondNumber += e.target.id;
+                    document.querySelector('.display').lastElementChild.textContent = secondNumber;
+                }
+            }          
             
-        // }       
+            e.target.classList.add('numberClicked');
+        }       
 
-        e.target.classList.add('numberClicked');
+        
 
     } else if(targetClassList.contains('edit')) {
 
         e.target.classList.add('notNumberClicked');
         firstNumber = '';
         secondNumber = '';
-        isFirstNumber = true; // tells us we're back to setting up firstNumber
+        onFirstNumber = true; // tells us we're back to setting up firstNumber
         wasOperatorClicked = false; // tells us we're back to setting up firstNumber
+        wasDecimalClicked = false;
         document.querySelector('.display').lastElementChild.textContent = '0';
 
     } else if(targetClassList.contains('operator')) {
         // tells us first number has been set (since operator was pressed)
         // and start recording secondNumber
-        isFirstNumber = false;
+        onFirstNumber = false;
+
+        // set to false incase first number was decimal, and second is as well
+        wasDecimalClicked = false;
 
         
         // must be ===, otherwise '' is equal to 0 when using ==
@@ -177,7 +183,7 @@ function removeTransition(e) {
 
 
 // heck to see if a decimal has been clicked, if so do nothing, if not return a decimal
-function wasDecimal(){
+function isDecimal(){
     if(wasDecimalClicked){
         return '';
     } else {
