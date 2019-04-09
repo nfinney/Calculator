@@ -1,7 +1,7 @@
 // VARIABLE DECLARATIONS
 const buttons = Array.from(document.querySelectorAll('button'));
 
-const display = document.querySelector('.display').lastElementChild.textContent; //may not need
+// const display = document.querySelector('.display').lastElementChild.textContent; //may not need
 
 
 let firstNumber = '';
@@ -11,7 +11,6 @@ let onFirstNumber = true;
 
 let wasOperatorClicked = false;
 let wasDecimalClicked = false;
-// let operatorClicked = '';
 // END // VARIABLE DECLARATIONS
 
 
@@ -47,8 +46,7 @@ function operate(operator, a, b) {
                 return NaN;
             } else{
                 return divide(a, b);
-            }
-            
+            }            
         default:
             return a;
     }
@@ -90,17 +88,90 @@ function addTransition(e) {
 
         
 
-    } else if(targetClassList.contains('edit')) {
-
+    } else if(targetClassList.contains('delete')) {
+        
         e.target.classList.add('notNumberClicked');
-        firstNumber = '';
-        secondNumber = '';
-        onFirstNumber = true; // tells us we're back to setting up firstNumber
-        wasOperatorClicked = false; // tells us we're back to setting up firstNumber
-        wasDecimalClicked = false;
-        document.querySelector('.display').lastElementChild.textContent = '0';
+        console.log(e.target.id);
+        
+        if(e.target.id == 'clear') {
+            firstNumber = '';
+            secondNumber = '';
+            operatorHolder = '';
+            onFirstNumber = true; // tells us we're back to setting up firstNumber
+            wasOperatorClicked = false; // tells us we're back to setting up firstNumber
+            wasDecimalClicked = false;
+            document.querySelector('.display').lastElementChild.textContent = '0';
+        } else if(e.target.id == 'delete') {
+          
+            
+            // !!!!!!!!!!!!!NEXT STEP HERE!!!!!! next check if it's last number, set it to 0
+            
+
+
+            // firstNumber is recorded as a string first, once an operator is pressed, firstNumber is changed to a float
+            // when displayed, we don't actually round firstNumber 
+            // we do this to be more precise for math reasons (firstNumber stays more than 3 decimals)
+            // instead we set the display text to firstNumber as a rounded string
+            // therefore we need to compare a rounded String version of firstNumber to the display text
+            // if we don't, our if statement to change the firstNumber will always fail
+
+            let display = document.querySelector('.display').lastElementChild.textContent;
+            let firstNumberAsRoundedString = round(firstNumber, 3).toString();
+
+            // get the last character of the display string
+            var lastChar = display[display.length -1];
+          
+          
+            // if we want to delete the decimal AND a number if a decimal is the last character
+            // if(lastChar == '.') then firstNumber = display.splice(0,-1)
+            // we're also gonna have to reset wasDecimalClicked to false
+
+
+
+            // if(display == firstNumberAsRoundedString) {
+                
+            // if you check for display == to first number, if the first number hasn't been rounded yet in the display
+            // it will skip the if statement
+            // so make firstNumber the else because secondumber is never rounded
+            if(display == secondNumber.toString()) {
+                secondNumber = display.slice(0, -1);
+                document.querySelector('.display').lastElementChild.textContent = secondNumber;
+
+                // prob won't need these as they'll already be false
+                onFirstNumber = false; // tells us we're back to setting up firstNumber
+                wasOperatorClicked = true; // tells us we're back to setting up firstNumber
+
+                // was last char decimal
+                if(lastChar == '.') {
+                    wasDecimalClicked = false;
+                }
+            } else {
+                // doesn't matter if firstNumber is string or number as it will get parsed to float
+                firstNumber = display.slice(0, -1);
+                document.querySelector('.display').lastElementChild.textContent = firstNumber;
+
+                secondNumber = '';
+                operatorHolder = '';
+                onFirstNumber = true; // tells us we're back to setting up firstNumber
+                wasOperatorClicked = false; // tells us we're back to setting up firstNumber
+
+                // was last char decimal
+                if(lastChar == '.') {
+                    wasDecimalClicked = false;
+                }
+            }
+
+            // depending on which one, delete the last digit of the number
+            //    - if last digit is <= 9 or >= -9, then bring the number at 0
+            //    
+        }
+        
+        
 
     } else if(targetClassList.contains('operator')) {
+
+        e.target.classList.add('notNumberClicked');
+
         // tells us first number has been set (since operator was pressed)
         // and start recording secondNumber
         onFirstNumber = false;
@@ -130,11 +201,11 @@ function addTransition(e) {
         
 
     } else if(targetClassList.contains('equals')) {
+
+        e.target.classList.add('notNumberClicked');
+
         if(firstNumber == '' & secondNumber == ''){
             return;
-            // firstNumber = 0;
-            // secondNumber = 0;
-            // document.querySelector('.display').lastElementChild.textContent = firstNumber;
         } else {
             firstNumber = operate(operatorHolder, parseFloat(firstNumber), parseFloat(secondNumber));
             
@@ -148,14 +219,6 @@ function addTransition(e) {
             // and adds the previous second number to the sum
             secondNumber = ''; 
         }
-
-
-        // NEXT STEPS HERE!!!!!
-        // 1) if user hits +, 3, =, =, =,
-        //      - it should return 3 + 3 + 3 + 3 continous
-        //      - not 3+3 = 6 + 6 = 12 + 12 = 24
-
-
 
     }
 }
