@@ -74,11 +74,11 @@ button.notNumberClicked {
 
 
 /* BUTTON SECTION */
-#clear, #delete, [id="/"], [id="0"] {
+#clear, #backspace, [id="/"], [id="0"] {
     grid-column: 1 / 3;
     grid-row: 2 / 3;
 }
-#delete {
+#backspace {
     grid-column: 3 / 4;
 }
 [id="/"], [id="*"] {
