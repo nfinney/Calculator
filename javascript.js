@@ -104,8 +104,7 @@ function addTransition(e) {
         } else if(e.target.id == 'delete') {
           
             
-            // !!!!!!!!!!!!!NEXT STEP HERE!!!!!! next check if it's last number, set it to 0
-            
+           
 
 
             // firstNumber is recorded as a string first, once an operator is pressed, firstNumber is changed to a float
@@ -116,7 +115,7 @@ function addTransition(e) {
             // if we don't, our if statement to change the firstNumber will always fail
 
             let display = document.querySelector('.display').lastElementChild.textContent;
-            let firstNumberAsRoundedString = round(firstNumber, 3).toString();
+            let firstNumberAsRoundedString = round(firstNumber, 3).toString(); // may not need this
 
             // get the last character of the display string
             var lastChar = display[display.length -1];
@@ -126,16 +125,20 @@ function addTransition(e) {
             // if(lastChar == '.') then firstNumber = display.splice(0,-1)
             // we're also gonna have to reset wasDecimalClicked to false
 
-
-
-            // if(display == firstNumberAsRoundedString) {
                 
             // if you check for display == to first number, if the first number hasn't been rounded yet in the display
             // it will skip the if statement
             // so make firstNumber the else because secondumber is never rounded
             if(display == secondNumber.toString()) {
-                secondNumber = display.slice(0, -1);
-                document.querySelector('.display').lastElementChild.textContent = secondNumber;
+               
+                if(display.slice(0, -1) == ''){
+                    secondNumber = '';
+                    document.querySelector('.display').lastElementChild.textContent = '0';
+                } else {
+                    // doesn't matter if firstNumber is string or number as it will get parsed to float
+                    secondNumber = display.slice(0, -1);
+                    document.querySelector('.display').lastElementChild.textContent = secondNumber;
+                }
 
                 // prob won't need these as they'll already be false
                 onFirstNumber = false; // tells us we're back to setting up firstNumber
@@ -146,9 +149,17 @@ function addTransition(e) {
                     wasDecimalClicked = false;
                 }
             } else {
-                // doesn't matter if firstNumber is string or number as it will get parsed to float
-                firstNumber = display.slice(0, -1);
-                document.querySelector('.display').lastElementChild.textContent = firstNumber;
+                
+                if(display.slice(0, -1) == ''){
+                    firstNumber = '';
+                    document.querySelector('.display').lastElementChild.textContent = '0';
+                } else {
+                    // doesn't matter if firstNumber is string or number as it will get parsed to float
+                    firstNumber = display.slice(0, -1);
+                    document.querySelector('.display').lastElementChild.textContent = firstNumber;
+                }
+                                
+                // document.querySelector('.display').lastElementChild.textContent = firstNumber;
 
                 secondNumber = '';
                 operatorHolder = '';
